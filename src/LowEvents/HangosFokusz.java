@@ -45,5 +45,4 @@ public class HangosFokusz extends JFrame implements FocusListener {
     public static void main(String[] args) {
         new HangosFokusz();
     }
-
 }

@@ -31,7 +31,7 @@ public class EgerKoord2 extends JFrame {
 
 class EgerPanel extends JPanel implements MouseListener {
 
-    private Vector koords = new Vector();
+    private Vector koordianatak = new Vector();
 
     public EgerPanel() {
         addMouseListener(this);
@@ -41,8 +41,8 @@ class EgerPanel extends JPanel implements MouseListener {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.setFont(new Font("Arial", Font.ITALIC, 20));
-        for (int i = 0; i < koords.size(); i++) {
-            Point e = (Point) koords.get(i);
+        for (int i = 0; i < koordianatak.size(); i++) {
+            Point e = (Point) koordianatak.get(i);
             int x = (int) e.getX();
             int y = (int) e.getY();
             g.drawString(".(" + x + "," + y + ")", x - 1, y + 1);
@@ -56,7 +56,7 @@ class EgerPanel extends JPanel implements MouseListener {
             g.setFont(new Font("Arial", Font.ITALIC, 20));
             g.drawString(".(" + e.getX() + "," + e.getY() + ")",
                     e.getX() - 1, e.getY() + 1);
-            koords.add(new Point(e.getX(), e.getY()));
+            koordianatak.add(new Point(e.getX(), e.getY()));
         }
     }
 

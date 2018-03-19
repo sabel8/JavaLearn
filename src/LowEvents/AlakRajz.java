@@ -204,5 +204,4 @@ class Vaszon extends JPanel {
                 break;
         }
     }
-
 }

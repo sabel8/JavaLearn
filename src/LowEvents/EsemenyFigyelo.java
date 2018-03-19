@@ -13,7 +13,7 @@ import javax.swing.JTextArea;
 
 /**
  *
- * @author x360g
+ * @author Sarandi Abel
  */
 public class EsemenyFigyelo extends JFrame {
 
