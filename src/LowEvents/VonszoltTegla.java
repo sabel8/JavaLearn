@@ -32,7 +32,7 @@ class Felulet extends JPanel {
 
     private Vector teglalapok;
     private Teglalap t;
-    private int kezdoX, kezdoY;
+    private int kezdoX, kezdoY, x, y, width, height;
 
     public Felulet() {
         teglalapok = new Vector();
@@ -50,7 +50,7 @@ class Felulet extends JPanel {
             @Override
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
-                teglalapok.add(new Teglalap(kezdoX, kezdoY, e.getX() - kezdoX, e.getY() - kezdoY));
+                teglalapok.add(new Teglalap(x, y, width, height));
                 repaint();
             }
 
@@ -60,18 +60,14 @@ class Felulet extends JPanel {
             @Override
             public void mouseDragged(MouseEvent e) {
                 super.mouseDragged(e);
-//                try {
-//                    teglalapok.remove(teglalapok.size());
-//                } catch (Exception ex) {
-//                }
-//                teglalapok.add(new Teglalap(kezdoX, kezdoY, e.getX() - kezdoX, e.getY() - kezdoY));
-//                repaint();
-//                teglalapok.remove(teglalapok.size());
-
                 Graphics g = getGraphics();
                 g.clearRect(0, 0, getWidth(), getHeight());
                 repaint();
-                g.drawRect(kezdoX, kezdoY, e.getX() - kezdoX, e.getY() - kezdoY);
+                x = Integer.min(kezdoX, e.getX());
+                y = Integer.min(kezdoY, e.getY());
+                width = Math.abs(kezdoX - e.getX());
+                height = Math.abs(kezdoY - e.getY());
+                g.drawRect(x, y, width, height);
             }
         });
     }
@@ -79,7 +75,7 @@ class Felulet extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        System.out.println("teglalapok.size() = " + teglalapok.size());
+        g.drawRect(300, 300, -100, -100);
         for (int i = 0; i < teglalapok.size(); i++) {
             t = (Teglalap) teglalapok.get(i);
             g.drawRect(t.getKezdoX(), t.getKezdoY(), t.getVegX(), t.getVegY());
