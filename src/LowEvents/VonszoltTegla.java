@@ -30,7 +30,9 @@ public class VonszoltTegla extends JFrame {
 
 class Felulet extends JPanel {
 
+    private int gridStepX = 10, gridStepY = 10;
     private Vector teglalapok;
+    private Teglalap aktT;
     private Teglalap t;
     private int kezdoX, kezdoY, x, y, width, height;
 
@@ -40,17 +42,15 @@ class Felulet extends JPanel {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
+                t = new Teglalap(kezdoX, kezdoY);
                 kezdoX = e.getX();
                 kezdoY = e.getY();
-
-                Graphics g = getGraphics();
-                g.drawRect(kezdoX, kezdoY, e.getX() - kezdoX, e.getY() - kezdoY);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
-                teglalapok.add(new Teglalap(x, y, width, height));
+                teglalapok.add(t);
                 repaint();
             }
 
@@ -61,13 +61,14 @@ class Felulet extends JPanel {
             public void mouseDragged(MouseEvent e) {
                 super.mouseDragged(e);
                 Graphics g = getGraphics();
-                g.clearRect(0, 0, getWidth(), getHeight());
-                repaint();
+                g.setXORMode(getBackground());
+                t.draw(g);
                 x = Integer.min(kezdoX, e.getX());
                 y = Integer.min(kezdoY, e.getY());
                 width = Math.abs(kezdoX - e.getX());
                 height = Math.abs(kezdoY - e.getY());
-                g.drawRect(x, y, width, height);
+                t = new Teglalap(x, y, width, height);
+                t.draw(g);
             }
         });
     }
@@ -75,10 +76,21 @@ class Felulet extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawRect(300, 300, -100, -100);
+        System.out.println("teglalapok.size() = " + teglalapok.size());
         for (int i = 0; i < teglalapok.size(); i++) {
-            t = (Teglalap) teglalapok.get(i);
-            g.drawRect(t.getKezdoX(), t.getKezdoY(), t.getVegX(), t.getVegY());
+            aktT = (Teglalap) teglalapok.get(i);
+            g.drawRect(aktT.getKezdoX(), aktT.getKezdoY(),
+                    aktT.getWidth(), aktT.getHeight());
+        }
+        for (int ix = 0; ix < getWidth(); ix += gridStepX) {
+            for (int iy = 0; iy < getHeight(); iy += gridStepY) {
+                g.fillOval(ix, iy, 2, 2);
+            }
+        }
+        for (int iy = 0; iy < getHeight(); iy += gridStepY) {
+            for (int ix = 0; ix < getWidth(); ix += gridStepX) {
+                g.fillOval(ix, iy, 2, 2);
+            }
         }
     }
 }
@@ -86,13 +98,26 @@ class Felulet extends JPanel {
 class Teglalap {
 
     private int kezdoX, kezdoY;
-    private int vegX, vegY;
+    private int width, height;
 
-    public Teglalap(int kezdoX, int kezdoY, int vegX, int vegY) {
+    public Teglalap(int kezdoX, int kezdoY, int width, int height) {
         this.kezdoX = kezdoX;
         this.kezdoY = kezdoY;
-        this.vegX = vegX;
-        this.vegY = vegY;
+        this.width = width;
+        this.height = height;
+    }
+
+    public Teglalap(int kezdoX, int kezdoY) {
+        this.kezdoX = kezdoX;
+        this.kezdoY = kezdoY;
+        this.width = kezdoX;
+        this.height = kezdoY;
+    }
+
+    void draw(Graphics g) {
+        if (width != kezdoX) {
+            g.drawRect(kezdoX, kezdoY, width, height);
+        }
     }
 
     public int getKezdoX() {
@@ -103,12 +128,22 @@ class Teglalap {
         return kezdoY;
     }
 
-    public int getVegX() {
-        return vegX;
+    public int getWidth() {
+        return width;
     }
 
-    public int getVegY() {
-        return vegY;
+    public int getHeight() {
+        return height;
+    }
+
+    public void setKezdo(int kezdoX, int kezdoY) {
+        this.kezdoX = kezdoX;
+        this.kezdoY = kezdoY;
+    }
+
+    public void setVeg(int width, int height) {
+        this.width = width;
+        this.height = height;
     }
 
 }
